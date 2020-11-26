@@ -10,11 +10,13 @@ public:
 	sf::Text expression;
 	sf::String exp{};
 
+
 private:
 	sf::RectangleShape display;
 	
 	sf::Font font;
 	sf::Text result;
+	sf::String res{"0"};
 
 	int nofop{}; //amount of opening parentheses
 	int nofcp{}; //amount of closing parentheses
@@ -26,4 +28,5 @@ private:
 	}
 
 	bool findDot();
+	void adjustWidth(sf::Text&, sf::String&, bool);
 };

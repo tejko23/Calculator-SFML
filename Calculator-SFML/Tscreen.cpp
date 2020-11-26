@@ -16,7 +16,7 @@ Tscreen::Tscreen() {
 	result.setCharacterSize(60);
 	expression.setFillColor(sf::Color::White);
 	result.setFillColor(sf::Color::White);
-	result.setString("0");
+	result.setString(res);
 
 	sf::FloatRect bounds = result.getLocalBounds();
 	expression.setPosition(sf::Vector2f(300, 10));
@@ -26,7 +26,7 @@ Tscreen::Tscreen() {
 void Tscreen::addValue(string s) {
 	if (s == "C") {
 		exp.clear();
-		result.setString("0");
+		res = "0";
 		nofop = 0;
 		nofcp = 0;
 	}
@@ -60,7 +60,7 @@ void Tscreen::addValue(string s) {
 		exp = calc.getExp();
 		nofop = calc.getAmountop();
 		nofcp = calc.getAmountcp();
-		result.setString(calc.getResult());
+		res = calc.getResult();
 	}
 	else if (s == "(") {
 		nofop++;
@@ -79,12 +79,22 @@ void Tscreen::addValue(string s) {
 		else exp += s;
 	}
 
-	expression.setString(exp);
-	sf::FloatRect bounds = expression.getLocalBounds();
-	expression.setPosition(sf::Vector2f(300 - bounds.width, 10));
+	adjustWidth(expression, exp, false);
+	adjustWidth(result, res, true);
 
-	bounds = result.getLocalBounds();
-	result.setPosition(sf::Vector2f(300 - bounds.width, 48));
+}
+
+void Tscreen::adjustWidth(sf::Text &txt, sf::String &str, bool b) {
+	txt.setString(str);
+	sf::FloatRect bounds = txt.getLocalBounds();
+	int n = 1;
+	while (bounds.width > 264) {
+		if(!b) txt.setString(str.substring(n, str.getSize()));
+		else txt.setString(str.substring(0, str.getSize()-n));
+		bounds = txt.getLocalBounds();
+		n++;
+	}
+	txt.setPosition(sf::Vector2f(300 - bounds.width, txt.getPosition().y));
 }
 
 string Tscreen::askforButtons() {
